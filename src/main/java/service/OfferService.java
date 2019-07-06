@@ -1,6 +1,7 @@
 package service;
 
 import domain.Offer;
+import domain.Quote;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,6 +27,16 @@ public class OfferService {
       } else break;
     }
     return offers;
+  }
+
+  public static Quote getQuote(final List<Offer> selectedOffers) {
+    final double monthlyPayment = selectedOffers.stream().mapToDouble(offer -> LoanCalculator.calculateMonthlyPayment(offer.getAvailable(), offer.getRate(), 36)).sum();
+    return new Quote.QuoteBuilder()
+      .setTotalAmount(selectedOffers.stream().map(Offer::getAvailable).reduce(0d, Double::sum))
+      .setRate(LoanCalculator.getWeightedLoanRate(selectedOffers))
+      .setMonthlyRepayment(monthlyPayment)
+      .setTotalRepayment(monthlyPayment * 36)
+      .build();
   }
 
   private static void validateAmount(final double amount) {

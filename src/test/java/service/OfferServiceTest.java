@@ -1,6 +1,7 @@
 package service;
 
 import domain.Offer;
+import domain.Quote;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -70,5 +71,20 @@ class OfferServiceTest {
     assertEquals(23, actualOffers.get(2).getAvailable());
     assertEquals(0.05, actualOffers.get(2).getRate());
     assertEquals(631, offer5.getAvailable());
+  }
+
+  @Test
+  @DisplayName("getQuote should return quote from offers")
+  void getQuoteShouldReturnQuoteFromOffers() {
+    final Offer offer1 = new Offer("Jane", 0.069, 480);
+    final Offer offer2 = new Offer("Fred", 0.071, 520);
+
+    final Quote quote = OfferService.getQuote(Arrays.asList(offer1, offer2));
+
+    assertNotNull(quote);
+    assertEquals(1000, quote.getTotalAmount());
+    assertEquals(0.07003999999999999, quote.getRate());
+    assertEquals(30.78059417320818, quote.getMonthlyRepayment());
+    assertEquals(1108.1013902354944, quote.getTotalRepayment());
   }
 }
