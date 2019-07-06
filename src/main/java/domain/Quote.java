@@ -29,6 +29,23 @@ public class Quote {
     return totalRepayment;
   }
 
+  @Override
+  public String toString() {
+    return new StringBuilder()
+      .append("Requested amount: ")
+      .append(getTotalAmount())
+      .append(System.lineSeparator())
+      .append("Annual Interest Rate: ")
+      .append(getRate())
+      .append(System.lineSeparator())
+      .append("Monthly repayment: ")
+      .append(getMonthlyRepayment())
+      .append(System.lineSeparator())
+      .append("Total repayment: ")
+      .append(getTotalRepayment())
+      .toString();
+  }
+
   public static class QuoteBuilder {
     private double totalAmount;
     private double rate;
