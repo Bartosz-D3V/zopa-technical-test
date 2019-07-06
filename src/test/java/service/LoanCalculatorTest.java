@@ -1,11 +1,13 @@
 package service;
 
+import domain.Offer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -91,5 +93,35 @@ class LoanCalculatorTest {
   @DisplayName("apyToAPR method should throw IllegalArgumentException if periods is zero")
   void apyToAPRShouldThrowErrorIfPeriodsIsZero() {
     assertThrows(IllegalArgumentException.class, () -> LoanCalculator.apyToAPR(0, 1));
+  }
+
+  @Test
+  @DisplayName("getWeightedLoanRate should return weighted rate")
+  void getWeightedLoanRateShouldReturnWeightedRate() {
+    final Offer offer1 = new Offer(null, 0.068, 20000);
+    final Offer offer2 = new Offer(null, 0.079, 10000);
+    final Offer offer3 = new Offer(null, 0.0541, 10000);
+
+    assertEquals(0.067275, LoanCalculator.getWeightedLoanRate(Arrays.asList(offer1, offer2, offer3)));
+  }
+
+  @Test
+  @DisplayName("getWeightedLoanRate should throw error if any rate is negative")
+  void getWeightedLoanRateShouldThrowErrorIfAnyRateIsNegative() {
+    final Offer offer1 = new Offer(null, 0.068, 20000);
+    final Offer offer2 = new Offer(null, -0.079, 10000);
+    final Offer offer3 = new Offer(null, 0.0541, 10000);
+
+    assertThrows(IllegalArgumentException.class, () -> LoanCalculator.getWeightedLoanRate(Arrays.asList(offer1, offer2, offer3)));
+  }
+
+  @Test
+  @DisplayName("getWeightedLoanRate should throw error if any rate is zero")
+  void getWeightedLoanRateShouldThrowErrorIfAnyRateIsZero() {
+    final Offer offer1 = new Offer(null, 0.068, 20000);
+    final Offer offer2 = new Offer(null, 0, 10000);
+    final Offer offer3 = new Offer(null, 0.0541, 10000);
+
+    assertThrows(IllegalArgumentException.class, () -> LoanCalculator.getWeightedLoanRate(Arrays.asList(offer1, offer2, offer3)));
   }
 }
