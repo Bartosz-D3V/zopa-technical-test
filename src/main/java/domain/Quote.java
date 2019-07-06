@@ -1,5 +1,8 @@
 package domain;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public final class Quote {
   private final double totalAmount;
   private final double rate;
@@ -31,18 +34,23 @@ public final class Quote {
 
   @Override
   public String toString() {
+    final NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(Locale.UK);
+    currencyInstance.setGroupingUsed(false);
+    final NumberFormat percentageInstance = NumberFormat.getPercentInstance(Locale.UK);
+    percentageInstance.setMinimumFractionDigits(1);
+    percentageInstance.setMaximumFractionDigits(1);
     return new StringBuilder()
       .append("Requested amount: ")
-      .append(getTotalAmount())
+      .append(currencyInstance.format(getTotalAmount()))
       .append(System.lineSeparator())
       .append("Annual Interest Rate: ")
-      .append(getRate())
+      .append(percentageInstance.format(getRate()))
       .append(System.lineSeparator())
       .append("Monthly repayment: ")
-      .append(getMonthlyRepayment())
+      .append(currencyInstance.format(getMonthlyRepayment()))
       .append(System.lineSeparator())
       .append("Total repayment: ")
-      .append(getTotalRepayment())
+      .append(currencyInstance.format(getTotalRepayment()))
       .toString();
   }
 
