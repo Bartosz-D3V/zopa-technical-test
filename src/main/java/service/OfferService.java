@@ -15,7 +15,7 @@ public class OfferService {
 
     final List<Offer> offers = new ArrayList<>();
     double amountToBorrow = amount;
-    for (Offer offer : availableOffers) {
+    for (final Offer offer : availableOffers) {
       final double available = offer.getAvailable();
       if (available < amountToBorrow) {
         offers.add(offer);
@@ -30,10 +30,10 @@ public class OfferService {
   }
 
   public static Quote getQuote(final List<Offer> selectedOffers) {
-    final double monthlyPayment = selectedOffers.stream().mapToDouble(offer -> LoanCalculator.calculateMonthlyPayment(offer.getAvailable(), offer.getRate(), 36)).sum();
+    final double monthlyPayment = selectedOffers.stream().mapToDouble(offer -> LoanService.calculateMonthlyPayment(offer.getAvailable(), offer.getRate(), 36)).sum();
     return new Quote.QuoteBuilder()
       .setTotalAmount(selectedOffers.stream().map(Offer::getAvailable).reduce(0d, Double::sum))
-      .setRate(LoanCalculator.getWeightedLoanRate(selectedOffers))
+      .setRate(LoanService.getWeightedLoanRate(selectedOffers))
       .setMonthlyRepayment(monthlyPayment)
       .setTotalRepayment(monthlyPayment * 36)
       .build();

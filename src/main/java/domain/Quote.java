@@ -1,12 +1,12 @@
 package domain;
 
-public class Quote {
-  private double totalAmount;
-  private double rate;
-  private double monthlyRepayment;
-  private double totalRepayment;
+public final class Quote {
+  private final double totalAmount;
+  private final double rate;
+  private final double monthlyRepayment;
+  private final double totalRepayment;
 
-  private Quote(double totalAmount, double rate, double monthlyRepayment, double totalRepayment) {
+  private Quote(final double totalAmount, final double rate, final double monthlyRepayment, final double totalRepayment) {
     this.totalAmount = totalAmount;
     this.rate = rate;
     this.monthlyRepayment = monthlyRepayment;
@@ -52,22 +52,22 @@ public class Quote {
     private double monthlyRepayment;
     private double totalRepayment;
 
-    public QuoteBuilder setTotalAmount(double totalAmount) {
+    public QuoteBuilder setTotalAmount(final double totalAmount) {
       this.totalAmount = totalAmount;
       return this;
     }
 
-    public QuoteBuilder setRate(double rate) {
+    public QuoteBuilder setRate(final double rate) {
       this.rate = rate;
       return this;
     }
 
-    public QuoteBuilder setMonthlyRepayment(double monthlyRepayment) {
+    public QuoteBuilder setMonthlyRepayment(final double monthlyRepayment) {
       this.monthlyRepayment = monthlyRepayment;
       return this;
     }
 
-    public QuoteBuilder setTotalRepayment(double totalRepayment) {
+    public QuoteBuilder setTotalRepayment(final double totalRepayment) {
       this.totalRepayment = totalRepayment;
       return this;
     }

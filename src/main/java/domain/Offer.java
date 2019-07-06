@@ -51,7 +51,7 @@ public final class Offer implements Comparable<Offer> {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (!(o instanceof Offer)) return false;
-    Offer offer = (Offer) o;
+    final Offer offer = (Offer) o;
     return Double.compare(offer.getRate(), getRate()) == 0 &&
       Double.compare(offer.getAvailable(), getAvailable()) == 0 &&
       Objects.equals(getLender(), offer.getLender());

@@ -4,10 +4,14 @@ import domain.Offer;
 import domain.Quote;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -15,30 +19,51 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class OfferServiceTest {
-  @Test
+  @ParameterizedTest
+  @MethodSource("negativeAmountProvider")
   @DisplayName("selectOffers should throw error if requested amount is less than £1000")
-  void selectOffersShouldThrowErrorIfAmountIsLessThan1000() {
-    assertThrows(IllegalArgumentException.class, () -> OfferService.selectOffers(Collections.emptyList(), 999));
-    assertThrows(IllegalArgumentException.class, () -> OfferService.selectOffers(Collections.emptyList(), 0));
-    assertThrows(IllegalArgumentException.class, () -> OfferService.selectOffers(Collections.emptyList(), -1000));
+  void selectOffersShouldThrowErrorIfAmountIsLessThan1000(final double amount) {
+    assertThrows(IllegalArgumentException.class, () -> OfferService.selectOffers(Collections.emptyList(), amount));
   }
 
-  @Test
+  private static Stream<Arguments> negativeAmountProvider() {
+    return Stream.of(
+      Arguments.of(999),
+      Arguments.of(0),
+      Arguments.of(-1000)
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("tooBigAmountProvider")
   @DisplayName("selectOffers should throw error if requested amount is greater than £15000")
-  void selectOffersShouldThrowErrorIfAmountIsGreaterThan15000() {
-    assertThrows(IllegalArgumentException.class, () -> OfferService.selectOffers(Collections.emptyList(), 1500.1));
-    assertThrows(IllegalArgumentException.class, () -> OfferService.selectOffers(Collections.emptyList(), 15001));
-    assertThrows(IllegalArgumentException.class, () -> OfferService.selectOffers(Collections.emptyList(), 20000));
+  void selectOffersShouldThrowErrorIfAmountIsGreaterThan15000(final double amount) {
+    assertThrows(IllegalArgumentException.class, () -> OfferService.selectOffers(Collections.emptyList(), amount));
   }
 
-  @Test
+  private static Stream<Arguments> tooBigAmountProvider() {
+    return Stream.of(
+      Arguments.of(1500.1),
+      Arguments.of(15001),
+      Arguments.of(20000)
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("incorrectMultiplicationAmountProvider")
   @DisplayName("selectOffers should throw error if requested amount is not multiplicity of £100")
-  void selectOffersShouldThrowErrorIfAmountIsNotMultiplicityOf100() {
-    assertThrows(IllegalArgumentException.class, () -> OfferService.selectOffers(Collections.emptyList(), 101));
-    assertThrows(IllegalArgumentException.class, () -> OfferService.selectOffers(Collections.emptyList(), 150));
-    assertThrows(IllegalArgumentException.class, () -> OfferService.selectOffers(Collections.emptyList(), 2057));
-    assertThrows(IllegalArgumentException.class, () -> OfferService.selectOffers(Collections.emptyList(), 2050));
-    assertThrows(IllegalArgumentException.class, () -> OfferService.selectOffers(Collections.emptyList(), 5010));
+  void selectOffersShouldThrowErrorIfAmountIsNotMultiplicityOf100(final double amount) {
+    assertThrows(IllegalArgumentException.class, () -> OfferService.selectOffers(Collections.emptyList(), amount));
+  }
+
+  private static Stream<Arguments> incorrectMultiplicationAmountProvider() {
+    return Stream.of(
+      Arguments.of(101),
+      Arguments.of(150),
+      Arguments.of(2057),
+      Arguments.of(2050),
+      Arguments.of(5010)
+    );
   }
 
   @Test
