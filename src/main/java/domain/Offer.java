@@ -4,7 +4,7 @@ import com.opencsv.bean.CsvBindByName;
 
 import java.util.Objects;
 
-public final class Offer {
+public final class Offer implements Comparable<Offer> {
   @CsvBindByName(column = "Lender", required = true)
   private String lender;
 
@@ -60,5 +60,10 @@ public final class Offer {
   @Override
   public int hashCode() {
     return Objects.hash(getLender(), getRate(), getAvailable());
+  }
+
+  @Override
+  public int compareTo(Offer anotherOffer) {
+    return Double.compare(getRate(), anotherOffer.getRate());
   }
 }
