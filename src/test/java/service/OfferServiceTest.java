@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class OfferServiceTest {
+
   @ParameterizedTest
   @MethodSource("negativeAmountProvider")
   @DisplayName("selectOffers should throw error if requested amount is less than £1000")
