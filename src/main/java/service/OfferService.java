@@ -20,7 +20,7 @@ public class OfferService {
       if (available < amountToBorrow) {
         offers.add(offer);
         amountToBorrow -= available;
-      } else if (available > amountToBorrow) {
+      } else if (available >= amountToBorrow) {
         offers.add(new Offer(offer.getLender(), offer.getRate(), amountToBorrow));
         offer.setAvailable(available - amountToBorrow);
         break;
