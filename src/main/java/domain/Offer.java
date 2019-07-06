@@ -1,17 +1,26 @@
 package domain;
 
-import java.math.BigDecimal;
+import com.opencsv.bean.CsvBindByName;
+
 import java.util.Objects;
 
 public final class Offer {
+  @CsvBindByName(column = "Lender", required = true)
   private String lender;
-  private double rate;
-  private BigDecimal available;
 
-  public Offer(final String lender, final double rate, final BigDecimal available) {
+  @CsvBindByName(column = "Rate", required = true)
+  private double rate;
+
+  @CsvBindByName(column = "Available", required = true)
+  private double available;
+
+  public Offer(final String lender, final double rate, final double available) {
     this.lender = lender;
     this.rate = rate;
     this.available = available;
+  }
+
+  public Offer() {
   }
 
   public String getLender() {
@@ -30,22 +39,22 @@ public final class Offer {
     this.rate = rate;
   }
 
-  public BigDecimal getAvailable() {
+  public double getAvailable() {
     return available;
   }
 
-  public void setAvailable(final BigDecimal available) {
+  public void setAvailable(final double available) {
     this.available = available;
   }
 
   @Override
-  public boolean equals(final Object o) {
+  public boolean equals(Object o) {
     if (this == o) return true;
     if (!(o instanceof Offer)) return false;
-    final Offer offer = (Offer) o;
+    Offer offer = (Offer) o;
     return Double.compare(offer.getRate(), getRate()) == 0 &&
-      Objects.equals(getLender(), offer.getLender()) &&
-      Objects.equals(getAvailable(), offer.getAvailable());
+      Double.compare(offer.getAvailable(), getAvailable()) == 0 &&
+      Objects.equals(getLender(), offer.getLender());
   }
 
   @Override
