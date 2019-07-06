@@ -20,7 +20,7 @@ class CSVServiceTest {
     final ClassLoader classLoader = CSVServiceTest.class.getClassLoader();
     final URL resource = classLoader.getResource("MarketDataForExercise.csv");
     assertNotNull(resource);
-    final List<Offer> offers = CSVService.readOffers(new File(resource.getFile()));
+    final List<Offer> offers = new CSVService().readObjects(new File(resource.getFile()), Offer.class);
 
     assertEquals(7, offers.size());
 
@@ -63,6 +63,6 @@ class CSVServiceTest {
   @Test
   @DisplayName("readOffers should throw error if file does not exist")
   void readOffersShouldThrowErrorIfFileDoesNotExist() {
-    assertThrows(IOException.class, () -> CSVService.readOffers(new File("")));
+    assertThrows(IOException.class, () -> new CSVService().readObjects(new File(""), Offer.class));
   }
 }
