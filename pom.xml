@@ -7,6 +7,11 @@
   <groupId>zopa</groupId>
   <artifactId>zopa-technical-test</artifactId>
   <version>1.0-SNAPSHOT</version>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
   <build>
     <plugins>
       <plugin>
@@ -29,6 +34,7 @@
             <artifactId>junit-platform-surefire-provider</artifactId>
             <version>1.2.0-M1</version>
           </dependency>
+
           <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>

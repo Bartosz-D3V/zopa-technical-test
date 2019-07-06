@@ -9,7 +9,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
-public class CSVParser {
+public class CSVService {
   public static List<Offer> readOffers(File file) throws IOException {
     return new CsvToBeanBuilder(new BufferedReader(new FileReader(file)))
       .withType(Offer.class)

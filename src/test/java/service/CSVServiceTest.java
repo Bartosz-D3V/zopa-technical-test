@@ -6,17 +6,21 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class CSVParserTest {
+class CSVServiceTest {
   @Test
   @DisplayName("readOffers should return list of offers from provided path to CSV file")
   void readOffersShouldReturnListOfOffers() throws IOException {
-    final ClassLoader classLoader = CSVParserTest.class.getClassLoader();
-    final List<Offer> offers = CSVParser.readOffers(new File(classLoader.getResource("MarketDataForExercise.csv").getFile()));
+    final ClassLoader classLoader = CSVServiceTest.class.getClassLoader();
+    final URL resource = classLoader.getResource("MarketDataForExercise.csv");
+    assertNotNull(resource);
+    final List<Offer> offers = CSVService.readOffers(new File(resource.getFile()));
 
     assertEquals(7, offers.size());
 
@@ -59,6 +63,6 @@ class CSVParserTest {
   @Test
   @DisplayName("readOffers should throw error if file does not exist")
   void readOffersShouldThrowErrorIfFileDoesNotExist() {
-    assertThrows(IOException.class, () -> CSVParser.readOffers(new File("")));
+    assertThrows(IOException.class, () -> CSVService.readOffers(new File("")));
   }
 }

@@ -13,7 +13,14 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class LoanCalculatorTest {
+class LoanServiceTest {
+
+  @ParameterizedTest
+  @MethodSource("totalMonthlyRepaymentProvider")
+  @DisplayName("calculateMonthlyPayment method should return total repayment amount")
+  void calculateCompoundInterestsShouldReturnTotalRepaymentAmount(final double expected, final double principal, final double apy) {
+    assertEquals(expected, LoanService.calculateMonthlyPayment(principal, apy, 36));
+  }
 
   private static Stream<Arguments> totalMonthlyRepaymentProvider() {
     return Stream.of(
@@ -24,35 +31,35 @@ class LoanCalculatorTest {
     );
   }
 
-  @ParameterizedTest
-  @MethodSource("totalMonthlyRepaymentProvider")
-  @DisplayName("calculateMonthlyPayment method should return total repayment amount")
-  void calculateCompoundInterestsShouldReturnTotalRepaymentAmount(final double expected, final double principal, final double apy) {
-    assertEquals(expected, LoanCalculator.calculateMonthlyPayment(principal, apy, 36));
-  }
-
   @Test
   @DisplayName("calculateMonthlyPayment method should throw IllegalArgumentException if APY is negative")
   void calculateMonthlyPaymentShouldThrowErrorIfAPYIsNegative() {
-    assertThrows(IllegalArgumentException.class, () -> LoanCalculator.calculateMonthlyPayment(1000, -1, 1));
+    assertThrows(IllegalArgumentException.class, () -> LoanService.calculateMonthlyPayment(1000, -1, 1));
   }
 
   @Test
   @DisplayName("calculateMonthlyPayment method should throw IllegalArgumentException if APY is zero")
   void calculateMonthlyPaymentShouldThrowErrorIfAPYIsZero() {
-    assertThrows(IllegalArgumentException.class, () -> LoanCalculator.calculateMonthlyPayment(1000, 0, 1));
+    assertThrows(IllegalArgumentException.class, () -> LoanService.calculateMonthlyPayment(1000, 0, 1));
   }
 
   @Test
   @DisplayName("calculateMonthlyPayment method should throw IllegalArgumentException if principal is negative")
   void calculateMonthlyPaymentShouldThrowErrorIfPrincipalIsNegative() {
-    assertThrows(IllegalArgumentException.class, () -> LoanCalculator.calculateMonthlyPayment(-1000, 1, 1));
+    assertThrows(IllegalArgumentException.class, () -> LoanService.calculateMonthlyPayment(-1000, 1, 1));
   }
 
   @Test
   @DisplayName("calculateMonthlyPayment method should throw IllegalArgumentException if principal is zero")
   void calculateMonthlyPaymentShouldThrowErrorIfPrincipalIsZero() {
-    assertThrows(IllegalArgumentException.class, () -> LoanCalculator.calculateMonthlyPayment(0, 1, 1));
+    assertThrows(IllegalArgumentException.class, () -> LoanService.calculateMonthlyPayment(0, 1, 1));
+  }
+
+  @ParameterizedTest
+  @MethodSource("apyAprProvider")
+  @DisplayName("apyToAPR should convert Annual Percentage Yield to Annual Percentage Rate")
+  void apyToAPR(final double expected, final double apy) {
+    assertEquals(expected, LoanService.apyToAPR(apy, 12));
   }
 
   private static Stream<Arguments> apyAprProvider() {
@@ -64,35 +71,28 @@ class LoanCalculatorTest {
     );
   }
 
-  @ParameterizedTest
-  @MethodSource("apyAprProvider")
-  @DisplayName("apyToAPR should convert Annual Percentage Yield to Annual Percentage Rate")
-  void apyToAPR(final double expected, final double apy) {
-    assertEquals(expected, LoanCalculator.apyToAPR(apy, 12));
-  }
-
   @Test
   @DisplayName("apyToAPR method should throw IllegalArgumentException if APY is negative")
   void apyToAPRShouldThrowErrorIfAPYIsNegative() {
-    assertThrows(IllegalArgumentException.class, () -> LoanCalculator.apyToAPR(-10, 1));
+    assertThrows(IllegalArgumentException.class, () -> LoanService.apyToAPR(-10, 1));
   }
 
   @Test
   @DisplayName("apyToAPR method should throw IllegalArgumentException if APY is zero")
   void apyToAPRShouldThrowErrorIfAPYIsZero() {
-    assertThrows(IllegalArgumentException.class, () -> LoanCalculator.apyToAPR(0, 1));
+    assertThrows(IllegalArgumentException.class, () -> LoanService.apyToAPR(0, 1));
   }
 
   @Test
   @DisplayName("apyToAPR method should throw IllegalArgumentException if periods is negative")
   void apyToAPRShouldThrowErrorIfPeriodsIsNegative() {
-    assertThrows(IllegalArgumentException.class, () -> LoanCalculator.apyToAPR(-10, 1));
+    assertThrows(IllegalArgumentException.class, () -> LoanService.apyToAPR(-10, 1));
   }
 
   @Test
   @DisplayName("apyToAPR method should throw IllegalArgumentException if periods is zero")
   void apyToAPRShouldThrowErrorIfPeriodsIsZero() {
-    assertThrows(IllegalArgumentException.class, () -> LoanCalculator.apyToAPR(0, 1));
+    assertThrows(IllegalArgumentException.class, () -> LoanService.apyToAPR(0, 1));
   }
 
   @Test
@@ -102,7 +102,7 @@ class LoanCalculatorTest {
     final Offer offer2 = new Offer(null, 0.079, 10000);
     final Offer offer3 = new Offer(null, 0.0541, 10000);
 
-    assertEquals(0.067275, LoanCalculator.getWeightedLoanRate(Arrays.asList(offer1, offer2, offer3)));
+    assertEquals(0.067275, LoanService.getWeightedLoanRate(Arrays.asList(offer1, offer2, offer3)));
   }
 
   @Test
@@ -112,7 +112,7 @@ class LoanCalculatorTest {
     final Offer offer2 = new Offer(null, -0.079, 10000);
     final Offer offer3 = new Offer(null, 0.0541, 10000);
 
-    assertThrows(IllegalArgumentException.class, () -> LoanCalculator.getWeightedLoanRate(Arrays.asList(offer1, offer2, offer3)));
+    assertThrows(IllegalArgumentException.class, () -> LoanService.getWeightedLoanRate(Arrays.asList(offer1, offer2, offer3)));
   }
 
   @Test
@@ -122,6 +122,6 @@ class LoanCalculatorTest {
     final Offer offer2 = new Offer(null, 0, 10000);
     final Offer offer3 = new Offer(null, 0.0541, 10000);
 
-    assertThrows(IllegalArgumentException.class, () -> LoanCalculator.getWeightedLoanRate(Arrays.asList(offer1, offer2, offer3)));
+    assertThrows(IllegalArgumentException.class, () -> LoanService.getWeightedLoanRate(Arrays.asList(offer1, offer2, offer3)));
   }
 }
