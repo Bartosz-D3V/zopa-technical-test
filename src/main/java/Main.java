@@ -5,6 +5,8 @@ import service.OfferService;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class Main {
@@ -15,11 +17,12 @@ public class Main {
 
     final List<Offer> offers = new CSVService().readObjects(new File(csvFileLocation), Offer.class);
     final List<Offer> selectedOffers = OfferService.selectOffers(offers, amount);
+    final PrintStream out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
     if (selectedOffers == null) {
-      System.out.println("We're sorry, we cannot provide you a quote for now.");
+      out.println("We're sorry, we cannot provide you a quote for now.");
     } else {
       final Quote quote = OfferService.getQuote(selectedOffers);
-      System.out.println(quote.toString());
+      out.println(quote.toString());
     }
   }
 }
