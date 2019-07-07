@@ -85,3 +85,13 @@ If provided parameters will be invalid application will print an exception.
 In order to run unit & integration tests, please execute the Maven test command:
 
     mvn test
+## Final thoughts
+The most difficult part of the development process, regardless of industry the company operates in, is gathering the business domain knowledge.
+
+In the provided CSV file, the rate can be either Annual Interest Rate, APR, or APY. To obtain the result provided in PDF example, I assumed that the rate is APY (i.e. Annual Percentage Yield).
+
+For the sake of readability, **double** primitive type has been used for expressing the rate and amount available. Nevertheless, if the application would have been used in the real world, it would has to be **BigDecimal**.
+
+Implement Dependency Injection (DI) mechanism to use abstraction, instead of actual implementation.
+
+All information written to console should be translated to other languages (I18N) (if necessary).
